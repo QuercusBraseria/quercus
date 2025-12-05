@@ -1,0 +1,35 @@
+geminiService.ts
+
+import { GoogleGenAI } from "@google/genai";
+import { MenuItem, MenuCategory, MenuType, Language } from '../types';
+
+const apiKey = process.env.API_KEY || ''; 
+const ai = new GoogleGenAI({ apiKey: apiKey });
+
+export const getSommelierRecommendation = async (query: string, menuItems: MenuItem[], language: Language): Promise<string> => {
+  if (!apiKey) return "Servicio no configurado (Falta API Key).";
+  const context = menuItems.filter(i => i.available).map(i => `- ${i.name}: ${i.description}. Precio: ${i.price}€. ${i.pairingNote ? `Maridaje: ${i.pairingNote}` : ''}`).join('\n');
+  
+  try {
+    const res = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: query,
+      config: {
+        systemInstruction: `Eres el sommelier de Quercus. Responde en ${language}. Usa solo esta carta:\n${context}\nSé breve (máximo 2 frases). Recomienda 1-2 vinos específicos.`,
+      }
+    });
+    return res.text || "Error.";
+  } catch (e) { return "Error de conexión."; }
+};
+
+export const parseMenuFromText = async (text: string): Promise<MenuItem[]> => {
+  if (!apiKey) throw new Error("Falta API Key");
+  try {
+    const res = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: `Analiza este menú y devuélvelo en JSON array con {name, description, price, category (Entrantes, Principales, Postres, Vinos Tintos, Vinos Blancos, Vinos Rosados, Cavas y Espumosos), type (food/wine), allergens (array string)}. Texto: ${text}`,
+      config: { responseMimeType: "application/json" }
+    });
+    return JSON.parse(res.text || '[]').map((i: any, idx: number) => ({ ...i, id: `imp_${Date.now()}_${idx}`, available: true }));
+  } catch (e) { return []; }
+};
