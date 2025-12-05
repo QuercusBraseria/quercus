@@ -1,15 +1,19 @@
-index.html
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+
+  <!-- PWA / Full Screen Settings for Tablets -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Quercus">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#f7f4ef">
+
   <title>Quercus Restaurant</title>
+
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -21,20 +25,35 @@ index.html
             },
             colors: {
               quercus: {
-                50: '#fcfaf8', 100: '#f7f4ef', 200: '#ede6da', 300: '#ded0bb',
-                400: '#cbb396', 500: '#b89676', 600: '#aa8263', 700: '#8e684f',
-                800: '#755544', 900: '#60463b',
+                50: '#fcfaf8',
+                100: '#f7f4ef',
+                200: '#ede6da',
+                300: '#ded0bb',
+                400: '#cbb396',
+                500: '#b89676',
+                600: '#aa8263',
+                700: '#8e684f',
+                800: '#755544',
+                900: '#60463b',
               }
             }
           },
         },
       }
   </script>
-  <style>.no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }</style>
+  <style>
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <body class="bg-quercus-100 text-quercus-900 font-sans antialiased overflow-hidden select-none">
   <div id="root"></div>
+  <!-- Entry point for Vite -->
   <script type="module" src="/src/index.tsx"></script>
 </body>
 </html>
